@@ -1,0 +1,50 @@
+,chofer_id,camion,edad,fecha_ingreso,Nombre
+0,1,25,39,2020-08-04,Christopher Holland
+1,2,26,43,2016-03-16,Leah Heath
+2,3,27,40,2021-08-18,David Newton
+3,4,28,42,2020-03-17,Michael Potter
+4,5,29,39,2023-02-21,Jacob Stone
+5,6,30,47,2018-05-17,George Reed
+6,7,31,34,2016-07-25,Anne Shah
+7,8,32,40,2016-08-10,Timothy Miller
+8,9,33,41,2017-02-10,Robert Reyes
+9,10,34,28,2018-10-01,Brandon Garcia
+10,11,35,45,2015-08-20,Rachel Garcia
+11,12,36,38,2015-10-22,Jessica Cortez
+12,13,37,26,2020-11-20,Kevin Roberson
+13,14,38,52,2020-11-08,Jeremy Parks
+14,15,39,52,2019-11-04,Bruce Gallegos
+15,16,40,28,2018-02-04,Mary Lee MD
+16,17,41,52,2021-07-12,Melissa Rowe
+17,18,42,43,2019-06-18,Kevin King
+18,19,43,31,2017-02-25,Scott Alexander
+19,20,44,38,2016-09-26,Craig Tyler
+20,21,45,26,2022-02-10,Tyler Palmer
+21,22,46,35,2019-06-04,Vernon Crawford
+22,23,47,54,2018-04-05,Aaron Stewart
+23,24,48,44,2019-06-18,Jason Sullivan
+24,25,49,55,2017-09-14,Mr. Nicholas Gibbs
+25,26,50,36,2022-08-21,Jared Miller
+26,27,51,38,2023-08-30,Angelica Smith
+27,28,52,45,2023-12-18,Eduardo Lin
+28,29,53,51,2019-12-08,Mr. Mario Jackson
+29,30,54,39,2022-11-11,Brandon Ross
+30,31,55,41,2022-04-23,Kristine Tanner
+31,32,56,30,2015-06-24,Dr. Dorothy Brewer
+32,33,57,26,2019-04-28,David Houston
+33,34,58,27,2015-02-17,Aimee Jackson
+34,35,59,29,2022-05-24,Rhonda Stevens
+35,36,60,45,2018-12-21,Bianca Walker
+36,37,61,33,2020-05-14,Courtney Smith
+37,38,62,39,2020-07-02,Ashley Rodgers
+38,39,63,28,2019-06-26,David Goodman
+39,40,64,33,2023-09-26,Regina Rodriguez
+40,41,65,27,2016-10-20,Keith Mills
+41,42,66,55,2021-07-17,Daniel Ewing
+42,43,67,37,2023-04-10,Francisco French
+43,44,68,33,2022-08-11,Matthew Hansen
+44,45,69,28,2021-10-12,Craig Paul
+45,46,70,45,2018-08-21,Debra Allen
+46,47,71,31,2023-03-24,Nicholas Madden
+47,48,72,46,2018-11-07,Taylor Cruz
+48,49,73,53,2016-01-08,Darlene Sparks
