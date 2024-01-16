@@ -1,5 +1,5 @@
-altair==4.2.0
-pandas==2.0.3
-plotly==5.18.0
-streamlit==1.29.0
+altair
+pandas
+plotly
+streamlit
 
