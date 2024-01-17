@@ -135,7 +135,54 @@ with a3:
                                                                  )
                  }
                  )
+st.header('',divider = "rainbow")
 
+familias_count = fact_viajes[['formula']]
+familias_count.rename(columns={"formula": "formula_id"}, inplace=True)
+dim_formulas.formula_id = dim_formulas.formula_id.astype('Int64')
+familias_count = familias_count.merge(dim_formulas[['formula_id', 'Especificada']], on='formula_id', how='left')
+
+familias_count = (
+    familias_count
+    .groupby('Especificada')
+    .count()
+    .reset_index()
+)
+
+familias_count['Especificada'] = familias_count['Especificada'].astype('category')
+
+distribucion, reclamos = st.columns(2)
+
+with distribucion:
+    bar_chart = px.bar(familias_count, x= 'formula_id', y = 'Especificada', text_auto= True)
+    bar_chart.update_layout(title={'text': 'Distribución de metros cúbicos despchados por familia', 'font': {'size': 20}},
+                            xaxis_title='Cantidad de metros cúbicos despachados', 
+                            yaxis_title='Familia de Hormigones',
+                            yaxis = {'categoryorder':'total descending'})
+    bar_chart.update_yaxes(type='category')
+
+    st.plotly_chart(bar_chart)
+
+with reclamos:
+    conteo_reclamos = (
+        fact_reclamos
+        .groupby('tipo')
+        .count()
+        .reset_index()
+    )
+    bar_chart_reclamos = px.bar(conteo_reclamos, x= 'tipo', y = 'remito', text_auto= True)
+    bar_chart_reclamos.update_layout(title={'text': 'Distribución de Reclamos', 'font': {'size': 20}},
+                            xaxis_title='Tipo de Reclamo', 
+                            yaxis_title='Conteo',
+                            yaxis = {'categoryorder':'total descending'})
+    bar_chart_reclamos.update_yaxes(type='category')
+
+    st.plotly_chart(bar_chart_reclamos)
+    
+
+st.header('',divider = "rainbow")
+##############################
+# Quality control charts
 for familia in fact_calidad['especificada'].unique():
     df_familia = fact_calidad[fact_calidad['especificada'] == familia]
 
@@ -156,7 +203,7 @@ for familia in fact_calidad['especificada'].unique():
     # Crear el gráfico
     fig = px.scatter(df_familia, x='fecha', y='resistencia_28', hover_data='remito')
 
-    fig.update_layout(title={'text': f'Gráfico de Control para la Familia de Resistencia: {familia}', 'y':0.9, 'x':0.5, 'xanchor': 'center', 'yanchor': 'top', 'font': {'size': 24}})
+    fig.update_layout(title={'text': f'Control para la Familia de Resistencia: {familia}', 'y':0.9, 'x':0.5, 'xanchor': 'center', 'yanchor': 'top', 'font': {'size': 24}})
 
     # Añadir líneas de media y límites de control
     fig.add_hline(y=media, line_dash="dash", line_color="green", annotation_text="Media")
@@ -167,7 +214,7 @@ for familia in fact_calidad['especificada'].unique():
     fig.update_layout(xaxis_title='Observación', yaxis_title='Medición')
 
     fig2 = px.line(df_familia_promedio_mensual, x=df_familia_promedio_mensual.index, y='resistencia_28')
-    fig2.update_layout(title={'text': f'Gráfico de Control de promedio mensual para la Familia de Resistencia: {familia}', 'y':0.9, 'x':0.5, 'xanchor': 'center', 'yanchor': 'top', 'font': {'size': 24}})
+    fig2.update_layout(title={'text': f'Promedio mensual para la Familia de Resistencia: {familia}', 'y':0.9, 'x':0.5, 'xanchor': 'center', 'yanchor': 'top', 'font': {'size': 24}})
 
     # Añadir líneas de media y límites de control
     fig2.add_hline(y=media, line_dash="dash", line_color="green", annotation_text="Media")
@@ -177,3 +224,4 @@ for familia in fact_calidad['especificada'].unique():
 
     st.plotly_chart(fig, use_container_width=True)
     st.plotly_chart(fig2, use_container_width=True)
+    st.header('',divider = "rainbow")
