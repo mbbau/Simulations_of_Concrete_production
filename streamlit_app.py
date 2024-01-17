@@ -4,6 +4,7 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import plotly.express as px
+import plotly.graph_objs as go
 
 #######################
 # Page configuration
@@ -28,11 +29,6 @@ fact_viajes['Year'] = fact_viajes['fecha'].dt.strftime('%Y')
 fact_viajes['Month'] = fact_viajes['fecha'].dt.strftime('%m')
 
 #######################
-# Sidebar
-with st.sidebar:
-    st.title('Filtering Panel')
-
-#######################
 # Header
     
 header1, header2 = st.columns((1,6))
@@ -41,10 +37,7 @@ with header1:
     st.image('Brain Technology_Full color.png')
 
 with header2:
-    st.markdown('# Concrete Production Dashboard')
-
-
-st.header("",divider = "rainbow")
+    st.header('Concrete Production Dashboard',divider = "rainbow")
 
 
 #######################
@@ -119,28 +112,68 @@ with a2:
 with a3:
     st.markdown("### Driver Ranking")
 
-    driver_ranking =(fact_viajes[['chofer_id', 'cantidad']]
+    driver_ranking =(fact_viajes[['chofer_id', 'cantidad','horas_viaje']]
                      .groupby('chofer_id')
                      .sum()
                      .reset_index()                     
     )
+    driver_ranking = driver_ranking.join(dim_choferes, lsuffix="", rsuffix="_dim")
+    driver_ranking['m3/hora'] = driver_ranking.cantidad / driver_ranking.horas_viaje
+    driver_ranking = driver_ranking[['Nombre', 'eficiencia', 'm3/hora']]
+    driver_ranking['rendimiento'] = round(driver_ranking.eficiencia * driver_ranking['m3/hora'],2)
 
     st.dataframe(driver_ranking,
-                 column_order = ('chofer_id', 'cantidad'),
+                 column_order = ('Nombre', 'rendimiento'),
                  hide_index = True,
                  width = 20000,
                  column_config={
-                     'chofer_id': st.column_config.TextColumn("Chofer",),
-                     'cantidad': st.column_config.ProgressColumn("m3 Despachados",
+                     'Nombre': st.column_config.TextColumn("Chofer",),
+                     'rendimiento': st.column_config.ProgressColumn("m3/hora",
                                                                  format="%f", 
                                                                  min_value=0,
-                                                                 max_value = max(driver_ranking.cantidad),
+                                                                 max_value = max(driver_ranking['rendimiento']),
                                                                  )
                  }
                  )
 
+for familia in fact_calidad['especificada'].unique():
+    df_familia = fact_calidad[fact_calidad['especificada'] == familia]
+
+    # Calcular la media y los límites de control
+    media = df_familia['resistencia_28'].mean()
+    desviacion_std = df_familia['resistencia_28'].std()
+    lcl = media - 1.96*desviacion_std  # Límite de control inferior
+    ucl = media + 1.96*desviacion_std  # Límite de control superior
+    df_familia = df_familia.join(fact_viajes[['remito', 'fecha']], lsuffix="", rsuffix="_dim")
+    
+    df_familia_promedio_mensual =(df_familia[['fecha', 'resistencia_28']]
+                                  .set_index('fecha')
+                                  .resample('M')
+                                  .mean()
+    )
+
+    
+    # Crear el gráfico
+    fig = px.scatter(df_familia, x='fecha', y='resistencia_28', hover_data='remito')
+
+    fig.update_layout(title={'text': f'Gráfico de Control para la Familia de Resistencia: {familia}', 'y':0.9, 'x':0.5, 'xanchor': 'center', 'yanchor': 'top', 'font': {'size': 24}})
+
+    # Añadir líneas de media y límites de control
+    fig.add_hline(y=media, line_dash="dash", line_color="green", annotation_text="Media")
+    fig.add_hline(y=lcl, line_dash="dash", line_color="red", annotation_text="LCL")
+    fig.add_hline(y=ucl, line_dash="dash", line_color="red", annotation_text="UCL")
+
+    # Actualizar título y ejes
+    fig.update_layout(xaxis_title='Observación', yaxis_title='Medición')
+
+    fig2 = px.line(df_familia_promedio_mensual, x=df_familia_promedio_mensual.index, y='resistencia_28')
+    fig2.update_layout(title={'text': f'Gráfico de Control de promedio mensual para la Familia de Resistencia: {familia}', 'y':0.9, 'x':0.5, 'xanchor': 'center', 'yanchor': 'top', 'font': {'size': 24}})
+
+    # Añadir líneas de media y límites de control
+    fig2.add_hline(y=media, line_dash="dash", line_color="green", annotation_text="Media")
+    #fig2.add_hline(y=lcl, line_dash="dash", line_color="red", annotation_text="LCL")
+    #fig2.add_hline(y=ucl, line_dash="dash", line_color="red", annotation_text="UCL")
 
 
-
-st.dataframe(production.head())
-
+    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig2, use_container_width=True)
