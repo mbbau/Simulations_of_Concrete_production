@@ -170,12 +170,21 @@ with reclamos:
         .count()
         .reset_index()
     )
-    bar_chart_reclamos = px.bar(conteo_reclamos, x= 'tipo', y = 'remito', text_auto= True)
+
+    colors = ['red' if i == conteo_reclamos['remito'].idxmax() else 'grey' for i in conteo_reclamos.index]
+
+    bar_chart_reclamos = px.bar(conteo_reclamos, 
+                                x= 'tipo', 
+                                y = 'remito', 
+                                text_auto= True, 
+                                color = colors)
     bar_chart_reclamos.update_layout(title={'text': 'Distribución de Reclamos', 'font': {'size': 20}},
                             xaxis_title='Tipo de Reclamo', 
                             yaxis_title='Conteo',
-                            yaxis = {'categoryorder':'total descending'})
+                            yaxis = {'categoryorder':'total descending'},
+                            showlegend=False)
     bar_chart_reclamos.update_yaxes(type='category')
+
 
     st.plotly_chart(bar_chart_reclamos)
     
