@@ -170,13 +170,24 @@ with reclamos:
         .reset_index()
     )
 
-    colors = ['red' if i == conteo_reclamos['remito'].idxmax() else 'grey' for i in conteo_reclamos.index]
+   # Identificar la barra con el mayor conteo
+    idx_max = conteo_reclamos['remito'].idxmax()
 
+    # Crear una nueva columna para el color
+    conteo_reclamos['color'] = 'grey'  # Por defecto, todas las barras en gris
+    conteo_reclamos.loc[idx_max, 'color'] = 'red'  # La barra con el mayor conteo en rojo
+
+    # Mapeo de colores personalizado
+    color_map = {'red': 'red', 'grey': '#cccccc'}
+
+    # Crear el gráfico de barras
     bar_chart_reclamos = px.bar(conteo_reclamos, 
-                                x= 'tipo', 
-                                y = 'remito', 
-                                text_auto= True, 
-                                color = colors)
+                                x='tipo', 
+                                y='remito', 
+                                text_auto=True, 
+                                color='color',  # Usar la columna 'color' para los colores
+                                color_discrete_map=color_map)  # Aplicar el mapeo de colores
+
     bar_chart_reclamos.update_layout(title={'text': 'Distribución de Reclamos', 'font': {'size': 20}},
                             xaxis_title='Tipo de Reclamo', 
                             yaxis_title='Conteo',
