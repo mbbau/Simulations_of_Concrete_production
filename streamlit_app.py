@@ -10,7 +10,7 @@ import plotly.graph_objs as go
 # Page configuration
 st.set_page_config(
     page_title="Concrete Production Dashboard",
-    layout="wide"s)
+    layout="wide")
 
 alt.themes.enable("dark")
 
