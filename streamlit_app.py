@@ -184,16 +184,14 @@ with reclamos:
     bar_chart_reclamos = px.bar(conteo_reclamos, 
                                 x='tipo', 
                                 y='remito', 
+                                text_auto=True, 
                                 color='color',  # Usar la columna 'color' para los colores
                                 color_discrete_map=color_map)  # Aplicar el mapeo de colores
 
     bar_chart_reclamos.update_layout(title={'text': 'Distribución de Reclamos', 'font': {'size': 20}},
                             xaxis_title='Tipo de Reclamo', 
                             yaxis_title='Conteo',
-                            yaxis = {'categoryorder':'total descending'},
                             showlegend=False)
-    bar_chart_reclamos.update_yaxes(type='category')
-
 
     st.plotly_chart(bar_chart_reclamos)
     
