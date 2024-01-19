@@ -154,7 +154,7 @@ distribucion, reclamos = st.columns(2)
 
 with distribucion:
     bar_chart = px.bar(familias_count, x= 'formula_id', y = 'Especificada', text_auto= True)
-    bar_chart.update_layout(title={'text': 'Distribución de metros cúbicos despchados por familia', 'font': {'size': 20}},
+    bar_chart.update_layout(title={'text': 'Distribución de metros cúbicos despachados por familia', 'font': {'size': 20}},
                             xaxis_title='Cantidad de metros cúbicos despachados', 
                             yaxis_title='Familia de Hormigones',
                             yaxis = {'categoryorder':'total descending'})
@@ -184,7 +184,6 @@ with reclamos:
     bar_chart_reclamos = px.bar(conteo_reclamos, 
                                 x='tipo', 
                                 y='remito', 
-                                text_auto=True, 
                                 color='color',  # Usar la columna 'color' para los colores
                                 color_discrete_map=color_map)  # Aplicar el mapeo de colores
 
